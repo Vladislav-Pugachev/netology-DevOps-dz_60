@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+  namespace: prod
+  labels:
+    app: front
+spec:
+  ports:
+  - port: 8000
+    targetPort: 80
+    name: front
+  selector:
+    app: front
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: front
+  name: front
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+      - image: vladpugachev/frontend:0.1
+        ports:
+          - containerPort: 80
+        imagePullPolicy: IfNotPresent
+        name: frontend
+      imagePullSecrets:
+        - name: regcred

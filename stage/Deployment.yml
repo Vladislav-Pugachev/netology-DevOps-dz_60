@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frontwhithback
+  name: frontwhithback
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontwhithback
+  template:
+    metadata:
+      labels:
+        app: frontwhithback
+    spec:
+      containers:
+      - image: vladpugachev/backend:0.1
+        imagePullPolicy: IfNotPresent
+        name: backend
+      - image: vladpugachev/frontend:0.1
+        imagePullPolicy: IfNotPresent
+        name: frontend
+      imagePullSecrets:
+        - name: regcred
